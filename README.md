@@ -1,25 +1,18 @@
 # АНАЛИЗ ДАННЫХ И ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ [in GameDev]
 Отчет по лабораторной работе #1 выполнил(а):
-- Иванова Ивана Варкравтовна
-- РИ000024
+- Морозов Андрей Андреевич
+- РИ300022
 Отметка о выполнении заданий (заполняется студентом):
 
 | Задание | Выполнение | Баллы |
-| ------ | ------ | ------ |
-| Задание 1 | # | 60 |
-| Задание 2 | # | 20 |
-| Задание 3 | # | 20 |
+| ------ |------------| ------ |
+| Задание 1 | *          | 60 |
+| Задание 2 | *          | 20 |
+| Задание 3 | *          | 20 |
 
 знак "*" - задание выполнено; знак "#" - задание не выполнено;
 
 Работу проверили:
-- к.т.н., доцент Денисов Д.В.
-- к.э.н., доцент Панов М.А.
-- ст. преп., Фадеев В.О.
-
-[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
-
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 Структура отчета
 
@@ -35,105 +28,134 @@
 - ✨Magic ✨
 
 ## Цель работы
-Ознакомиться с основными операторами зыка Python на примере реализации линейной регрессии.
+Ознакомиться с основными функциями Unity и взаимодействием с объектами внутри редактора.
 
 ## Задание 1
-### Пошагово выполнить каждый пункт раздела "ход работы" с описанием и примерами реализации задач
+### В разделе «ход работы» пошагово выполнить каждый пункт с описанием и примера реализации задач по теме видео самостоятельной работы.
 Ход работы:
-- Произвести подготовку данных для работы с алгоритмом линейной регрессии. 10 видов данных были установлены случайным образом, и данные находились в линейной зависимости. Данные преобразуются в формат массива, чтобы их можно было вычислить напрямую при использовании умножения и сложения.
+1) Создать новый проект из шаблона 3D – Core;
+2) Проверить, что настроена интеграция редактора Unity и Visual Studio Code
+   (пункты 8-10 введения);
+3) Создать объект Plane;
+4) Создать объект Cube;
+5) Создать объект Sphere;
+6) Установить компонент Sphere Collider для объекта Sphere;
+7) Настроить Sphere Collider в роли триггера;
+8) Объект куб перекрасить в красный цвет;
+9) Добавить кубу симуляцию физики, при это куб не должен проваливаться
+   под Plane;
+10) Написать скрипт, который будет выводить в консоль сообщение о том,
+    что объект Sphere столкнулся с объектом Cube;
+11) При столкновении Cube должен менять свой цвет на зелёный, а при
+    завершении столкновения обратно на красный.
 
+Скрипт куба меняющего цвет:
 ```py
+using UnityEngine;
 
-In [ ]:
-#Import the required modules, numpy for calculation, and Matplotlib for drawing
-import numpy as np
-import matplotlib.pyplot as plt
-#This code is for jupyter Notebook only
-%matplotlib inline
+public class Cube : MonoBehaviour
+{
+    [SerializeField] private Renderer rd;
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Столкновение началось");
+        SetColor(Color.green);
+    }
 
-# define data, and change list to array
-x = [3,21,22,34,54,34,55,67,89,99]
-x = np.array(x)
-y = [2,22,24,65,79,82,55,130,150,199]
-y = np.array(y)
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log("Столкновение закончилось");
+        SetColor(Color.red);
+    }
 
-#Show the effect of a scatter plot
-plt.scatter(x,y)
-
+    private void SetColor(Color color)
+    {
+        rd.material.SetColor("_Color", color);
+    }
+}
 ```
-
-- Определите связанные функции. Функция модели: определяет модель линейной регрессии wx+b. Функция потерь: функция потерь среднеквадратичной ошибки. Функция оптимизации: метод градиентного спуска для нахождения частных производных w и b.
-
 
 ## Задание 2
-### Должна ли величина loss стремиться к нулю при изменении исходных данных? Ответьте на вопрос, приведите пример выполнения кода, который подтверждает ваш ответ.
+### Продемонстрируйте на сцене в Unity следующее:
+### - Что произойдёт с координатами объекта, если он перестанет быть дочерним?
+### - Создайте три различных примера работы компонента RigidBody?
+Ход работы:
+1) Разобраться что произойдёт с координатами объекта, если он перестанет быть дочерним.
+2) Продемонстрировать это на сцене.
+3) Придумать три различных примера работы Rigidbody.
+4) Показать их на сцене.
 
-- Перечисленные в этом туториале действия могут быть выполнены запуском на исполнение скрипт-файла, доступного [в репозитории](https://github.com/Den1sovDm1triy/hfss-scripting/blob/main/ScreatingSphereInAEDT.py).
-- Для запуска скрипт-файла откройте Ansys Electronics Desktop. Перейдите во вкладку [Automation] - [Run Script] - [Выберите файл с именем ScreatingSphereInAEDT.py из репозитория].
-
+Летающий куб:
 ```py
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-import ScriptEnv
-ScriptEnv.Initialize("Ansoft.ElectronicsDesktop")
-oDesktop.RestoreWindow()
-oProject = oDesktop.NewProject()
-oProject.Rename("C:/Users/denisov.dv/Documents/Ansoft/SphereDIffraction.aedt", True)
-oProject.InsertDesign("HFSS", "HFSSDesign1", "HFSS Terminal Network", "")
-oDesign = oProject.SetActiveDesign("HFSSDesign1")
-oEditor = oDesign.SetActiveEditor("3D Modeler")
-oEditor.CreateSphere(
-	[
-		"NAME:SphereParameters",
-		"XCenter:="		, "0mm",
-		"YCenter:="		, "0mm",
-		"ZCenter:="		, "0mm",
-		"Radius:="		, "1.0770329614269mm"
-	], 
-)
+public class FlyingCube : MonoBehaviour
+{
+    [SerializeField] private Rigidbody rb;
 
+    private void FixedUpdate()
+    {
+        if (gameObject.transform.position.y < 4)
+        {
+            rb.AddForce(new Vector3(0, 100, 0));
+        }
+    }
+}
 ```
+Сфера сбивающая кубы:
+```py
+using UnityEngine;
+
+public class Sphere : MonoBehaviour
+{
+    [SerializeField] private Rigidbody rb;
+
+    private void OnEnable()
+    {
+        rb.AddForce(new Vector3(0, 0, -1000));
+    }
+}
+```
+![img.png](img.png)
 
 ## Задание 3
-### Какова роль параметра Lr? Ответьте на вопрос, приведите пример выполнения кода, который подтверждает ваш ответ. В качестве эксперимента можете изменить значение параметра.
+### Реализуйте на сцене генерацию n кубиков. Число n вводится пользователем после старта сцены.
 
-- Перечисленные в этом туториале действия могут быть выполнены запуском на исполнение скрипт-файла, доступного [в репозитории](https://github.com/Den1sovDm1triy/hfss-scripting/blob/main/ScreatingSphereInAEDT.py).
-- Для запуска скрипт-файла откройте Ansys Electronics Desktop. Перейдите во вкладку [Automation] - [Run Script] - [Выберите файл с именем ScreatingSphereInAEDT.py из репозитория].
+1) Сделать поле InputField.
+2) Создать объект CubeSpawner.
+3) Создать префаб куба.
+4) Написать скрипт для CubeSpawner.
+5) Настроить у InputField вызов SpawnCube в CubeSpawner, при завершении редактирования поля ввода.
 
 ```py
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
-import ScriptEnv
-ScriptEnv.Initialize("Ansoft.ElectronicsDesktop")
-oDesktop.RestoreWindow()
-oProject = oDesktop.NewProject()
-oProject.Rename("C:/Users/denisov.dv/Documents/Ansoft/SphereDIffraction.aedt", True)
-oProject.InsertDesign("HFSS", "HFSSDesign1", "HFSS Terminal Network", "")
-oDesign = oProject.SetActiveDesign("HFSSDesign1")
-oEditor = oDesign.SetActiveEditor("3D Modeler")
-oEditor.CreateSphere(
-	[
-		"NAME:SphereParameters",
-		"XCenter:="		, "0mm",
-		"YCenter:="		, "0mm",
-		"ZCenter:="		, "0mm",
-		"Radius:="		, "1.0770329614269mm"
-	], 
-)
+public class CubeSpawner : MonoBehaviour
+{
+[SerializeField] private Cube _cubePref;
+[SerializeField] private TMP_InputField _field;
 
+    public void SpawnNCubes()
+    {
+        var n = 0;
+        if (_field.text == null || !int.TryParse(_field.text, out n)) return;
+        for (var i = 0; i < n; i++)
+        {
+            Instantiate(_cubePref, gameObject.transform);
+        }
+    }
+}
 ```
+![img_1.png](img_1.png)
 
 ## Выводы
 
-Абзац умных слов о том, что было сделано и что было узнано.
-
-| Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md][PlDb] |
-| GitHub | [plugins/github/README.md][PlGh] |
-| Google Drive | [plugins/googledrive/README.md][PlGd] |
-| OneDrive | [plugins/onedrive/README.md][PlOd] |
-| Medium | [plugins/medium/README.md][PlMe] |
-| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
-
-## Powered by
-
-**BigDigital Team: Denisov | Fadeev | Panov**
+В ходе работы я использовал уже имеющиеся у меня знания работы в Unity, самостоятельно без видеороликов выполнил лабораторную работу.
